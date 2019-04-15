@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Data set summary</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+<!-- Our CSS -->
+
+<style type="text/css">
+  .centered {
+  text-align:center;
+  display:block;
+  }
+</style>
+
+
+
+
+<!-- Current DataTables and jQuery code -->
+
+<script type="text/javascript" language="javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script type="text/javascript" language="javascript" src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+
+
+
+<!-- Enabling DataTables for "datatable" id -->
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function(){
+  $('#datatable').DataTable();
+  });
+</script>
+
+
+
+
+<!-- See knitr/misc/datatables.html. May or may not be useful/necessary. -->
+
+<style type="text/css">
+  p {clear:both;}
+</style>
+
+
+
+
+<!-- For simple sidebar TOC -->
+
+<style type="text/css">
+  #toc {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  overflow: auto;
+  background-color: #EAEAEA;
+  padding: 10px 0 0 10px;
+  font-size: 75%
+  }
+  body {
+  margin: auto;
+  margin-left: 300px;
+  padding: 0 0 0 25px;
+  }
+</style>
+
+</head>
+
+<body>
+<div id="toc">
+<div id="toc_header">Table of Contents</div>
+<ul>
+<li>
+<a href="#toc_0">Data set summary</a>
+</li>
+<li>
+<a href="#toc_1">Technical metrics</a>
+<ul>
+<li>
+<a href="#toc_2">Fields of view</a>
+</li>
+<li>
+<a href="#toc_3">Binding density</a>
+</li>
+<li>
+<a href="#toc_4">Technical metrics summary</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_5">Control probe metrics</a>
+<ul>
+<li>
+<a href="#toc_6">Negative and positive control probes</a>
+</li>
+<li>
+<a href="#toc_7">Sample-specific background level</a>
+</li>
+<li>
+<a href="#toc_8">Spike-in linearity</a>
+</li>
+<li>
+<a href="#toc_9">Control probe interquartile range</a>
+</li>
+<li>
+<a href="#toc_10">Positive control scaling factors</a>
+</li>
+<li>
+<a href="#toc_11">Control probe metrics summary</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_12">Count-based metrics</a>
+<ul>
+<li>
+<a href="#toc_13">Total counts and positive control counts</a>
+</li>
+<li>
+<a href="#toc_14">Gene detection count</a>
+</li>
+<li>
+<a href="#toc_15">Count-based metrics summary</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_16">Flagged samples summary</a>
+</li>
+<li>
+<a href="#toc_17">Similarity between samples</a>
+</li>
+<li>
+<a href="#toc_18">Probe level QC</a>
+<ul>
+<li>
+<a href="#toc_19">Probe behavior in blank samples</a>
+</li>
+<li>
+<a href="#toc_20">Probes with extreme counts</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_21">QC metrics in normalized data</a>
+<ul>
+<li>
+<a href="#toc_22">Housekeeping genes</a>
+</li>
+<li>
+<a href="#toc_23">Housekeeping and global median normalization</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_24">Recommendations</a>
+<ul>
+<li>
+<a href="#toc_25">QC flag summary</a>
+</li>
+<li>
+<a href="#toc_26">Clustering and QC-flagged samples</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_27">SessionInfo</a>
+</li>
+</ul>
+</div>
+
+
+<h1 id="toc_0">Data set summary</h1>
+
+<p>The data set was composed of 111 samples and 770 genes. </p>
+
+<h1 id="toc_1">Technical metrics</h1>
+
+<p>As a first step in quality control, we assess whether technical aspects differed across samples.</p>
+
+<h2 id="toc_2">Fields of view</h2>
+
+<p>According to the <a href="http://www.nanostring.com/media/pdf/MAN_nCounter_Gene_Expression_Data_Analysis_Guidelines.pdf">nCounter&reg; Expression Data Analysis Guide</a>, &ldquo;the nCounter&reg; Digital Analyzer images each lane in discrete units, called fields of view (FOV). Optical issues, such as an inability to focus due to bubbles or insufficient oiling of the cartridge, can prevent successful imaging of a FOV. The Digital Analyzer reports the number of FOVs successfully imaged as &#39;FOV Counted&#39;. Significant discrepancy between the number of FOV for which imaging was attempted (FOV Count) and for which imaging was successful (FOV Counted) may be indicative of an issue with imaging performance.&rdquo; Samples with less than 80% FOV Counted are highlighted in red:</p>
+
+<p><img src="QC_report/flags_fov_plot-1.png" title="plot of chunk flags_fov_plot" alt="plot of chunk flags_fov_plot" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_3">Binding density</h2>
+
+<p>As the nCounter&reg; Digital Analyzer only counts non-overlapping barcodes, significant data loss could occur if there are too many barcodes in the imaged area. The nCounter&reg; Digital Analyzer calculates Binding Density as a measure of image saturation. For details, please see the <a href="http://www.nanostring.com/media/pdf/MAN_nCounter_Gene_Expression_Data_Analysis_Guidelines.pdf">nCounter&reg; Expression Data Analysis Guide</a>. According to NanoString&reg;, Binding Density which is either too low (&lt; 0.05) or too high (&gt; 2.25) is indicative of technical issues (e.g., excess RNA input); such samples are marked in red:</p>
+
+<p><img src="QC_report/bd_plot-1.png" title="plot of chunk bd_plot" alt="plot of chunk bd_plot" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_4">Technical metrics summary</h2>
+
+<p>Assessment of these technical factors resulted in flagging of 0 sample(s).</p>
+
+<h1 id="toc_5">Control probe metrics</h1>
+
+<h2 id="toc_6">Negative and positive control probes</h2>
+
+<p>All NanoString&reg; runs contain negative control probes that are designed to not hybridize to any human target. The background signal reported by the negative control probes typically differs somewhat from probe to probe. </p>
+
+<p>Positive control probes and associated spike-ins are also part of every NanoString&reg; run. For positive controls, there should be a linear relationship between the nominal input concentration and the reported counts. Because spike-ins differ by a common dilution factor, this linearity should be visible in the positive control box plot when counts are plotted on a logarithmic scale:</p>
+
+<p><img src="QC_report/control_plots1-1.png" title="plot of chunk control_plots1" alt="plot of chunk control_plots1" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_7">Sample-specific background level</h2>
+
+<p>Negative control probes can be used to determine lane-specific (i.e., sample-specific) background noise levels (to see the full plot, click on the preview image below):</p>
+
+<div class="centered">
+    <a href="QC_report/NegativeControlsByLane.png" target="_blank"><img src="QC_report/NegativeControlsByLane_preview.png"></a>
+</div>
+
+<h2 id="toc_8">Spike-in linearity</h2>
+
+<p>The slope estimate produced by fitting the linear model <em>log(counts) ~ log(input)</em> shows how well an increase in spike-in input is reflected by an increase in counts. Thresholds for identification of outliers (dotted red lines) were determined using the <em>cutoffByMMAD</em> method (see package documentation for this function); outliers, if any, are colored in red:</p>
+
+<p><img src="QC_report/control_plots3-1.png" title="plot of chunk control_plots3" alt="plot of chunk control_plots3" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_9">Control probe interquartile range</h2>
+
+<p>We can make use of the negative and positive controls for further quality control. For instance, an increased or decreased spread of the data stemming from the negative or positive controls might be indicative of technical issues (such as increased background or decreased dynamic range). Below, we plot the interquartile range (IQR) for negative and positive control probes. Thresholds for identification of outliers (dotted red lines) were determined using the <em>cutoffByMMAD</em> method. Outliers, if any, are colored in red:</p>
+
+<p><img src="QC_report/iqr_plots-1.png" title="plot of chunk iqr_plots" alt="plot of chunk iqr_plots" width="504px" style="display: block; margin: auto;" /><img src="QC_report/iqr_plots-2.png" title="plot of chunk iqr_plots" alt="plot of chunk iqr_plots" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_10">Positive control scaling factors</h2>
+
+<p>Finally, the overall signal for the spike-in controls may identify lanes experiencing technical issues. NanoString&reg; suggests calculating a positive control scaling factor; if this scaling factor is outside a range of 0.3 - 3, it may indicate significant under-performance, and such results should be interpreted with caution. Samples with positive control scaling factors outside the recommended range are colored in red; for more details, please see the vignette as well as the help page for the <em>posCtrlNorm</em> function.</p>
+
+<p><img src="QC_report/pos_norm_fact_plot-1.png" title="plot of chunk pos_norm_fact_plot" alt="plot of chunk pos_norm_fact_plot" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_11">Control probe metrics summary</h2>
+
+<p>1 sample(s) were flagged based on the performance of the controls.</p>
+
+<h1 id="toc_12">Count-based metrics</h1>
+
+<p>Problematic samples may exhibit unusual overall counts, or have many targets with counts below the background estimate.</p>
+
+<p>In each plot in this section, blank samples (if present in the experiment) are displayed as triangles. Thresholds for identification of outliers (dotted red lines) were determined using the <em>cutoffByMMAD</em> method (see package documentation for this function); outliers, if any, are colored in red. </p>
+
+<h2 id="toc_13">Total counts and positive control counts</h2>
+
+<p>We first plot the sum of all counts for each sample, excluding control probes. These counts reflect the amount of RNA input in each sample; any outliers might not have had enough input to permit reliable detection of genes with low expression levels. The next plot shows the ratio of positive control counts to all non-control counts for each sample.</p>
+
+<p><img src="QC_report/sum_plots-1.png" title="plot of chunk sum_plots" alt="plot of chunk sum_plots" width="504px" style="display: block; margin: auto;" /><img src="QC_report/sum_plots-2.png" title="plot of chunk sum_plots" alt="plot of chunk sum_plots" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_14">Gene detection count</h2>
+
+<p>For each sample, we plot the number of genes with counts that were below the estimated background, defining the LLOD using <em>cutoffByMMAD</em>. Samples with more than 20 % of genes missing are colored in red: </p>
+
+<p><img src="QC_report/lod-1.png" title="plot of chunk lod" alt="plot of chunk lod" width="504px" style="display: block; margin: auto;" /></p>
+
+<h2 id="toc_15">Count-based metrics summary</h2>
+
+<p>Assessment of these metrics resulted in flagging of 18 sample(s).</p>
+
+<h1 id="toc_16">Flagged samples summary</h1>
+
+<p>In total, 18 sample(s) were flagged based on quality metrics.</p>
+
+<h1 id="toc_17">Similarity between samples</h1>
+
+<p>Below, sample to sample correlations are clustered (distfun = &ldquo;euclidean&rdquo;, hclustfun = &ldquo;complete&rdquo;) and visualized in a heatmap. Deeper color represents a stronger correlation (to see the full-size image, click on the preview image below):</p>
+
+<div style="display: none">
+    <div class="centered">
+        <a href="QC_report/SampleClustering.png" target="_blank"><img src="QC_report/SampleClustering_preview.png"></a>
+    </div>
+</div>
+
+<div style="display: block">
+    (omitted since heatmaps were not enabled)
+</div>
+
+<h1 id="toc_18">Probe level QC</h1>
+
+<h2 id="toc_19">Probe behavior in blank samples</h2>
+
+<p>Blank samples allow background signal estimation in a probe-specific fashion. Blank samples also enable detection of other suspicious behavior, e.g., elevated background counts that might indicate problems during probe-target hybridization. If blank samples were included in the data set, you will see a boxplot showing each gene&#39;s counts in the blanks as well as red dots showing the estimated probe-specific background (to see the full plot, click on the preview image below):</p>
+
+<div class="centered" style="display: none">
+    <a href="QC_report/GenewiseCountsInBlankSamples.png" target="_blank"><img src="QC_report/GenewiseCountsInBlankSamples_preview.png"></a>
+</div>
+
+<div class="centered" style="display: block">
+    (omitted since no blank samples were found in the input)
+</div>
+
+<h2 id="toc_20">Probes with extreme counts</h2>
+
+<p>Probes which rarely produced signals above the LLOD are not informative for your experiment. On the other hand, if a small number of probes scavenge the majority of counts because their targets were extremely highly expressed, detection of low abundance transcripts may be compromised.</p>
+
+<p>To address these two issues, we first look at the least detectable genes. If multiple sample types were defined, we determine for each sample type separately the genes that produced counts above the estimated background in less than 50% of these samples. (Note: up to 20 least detectable genes are shown for each sample type.)</p>
+
+<pre><code>## Error in par(mfrow = c(length(sampleT), 1)): invalid value specified for graphical parameter &quot;mfrow&quot;
+</code></pre>
+
+<p>Next, we show the five genes that produced the highest average counts; again, if multiple sample types were defined, the data will be split accordingly:</p>
+
+<pre><code>## Error in par(mfrow = c(1, length(sampleT))): invalid value specified for graphical parameter &quot;mfrow&quot;
+</code></pre>
+
+<h1 id="toc_21">QC metrics in normalized data</h1>
+
+<h2 id="toc_22">Housekeeping genes</h2>
+
+<p>After other preprocessing steps, data need to be normalized to correct for count differences caused by varying RNA input amounts. A popular method for doing so is using gene expression levels of housekeeping genes. We first inspect the expression of housekeeping genes across all samples to assess their suitability as normalization factors:</p>
+
+<p><img src="QC_report/assess_housekeeping-1.png" title="plot of chunk assess_housekeeping" alt="plot of chunk assess_housekeeping" width="504px" style="display: block; margin: auto;" /></p>
+
+<p>Additional metrics for assessing housekeeping gene behavior are available <a href="QC_report/HousekeepingGeneStats.txt">here</a>.</p>
+
+<h2 id="toc_23">Housekeeping and global median normalization</h2>
+
+<p>Another way to normalize data is to use information of all genes measured in the panel and to normalize by their median. Here we show the overall distribution of counts in all samples using raw data, and data normalized by housekeeping genes (if applicable) and scaling to global median:</p>
+
+<p><img src="QC_report/normalization_comparison_densities-1.png" title="plot of chunk normalization_comparison_densities" alt="plot of chunk normalization_comparison_densities" width="504px" style="display: block; margin: auto;" /><img src="QC_report/normalization_comparison_densities-2.png" title="plot of chunk normalization_comparison_densities" alt="plot of chunk normalization_comparison_densities" width="504px" style="display: block; margin: auto;" /><img src="QC_report/normalization_comparison_densities-3.png" title="plot of chunk normalization_comparison_densities" alt="plot of chunk normalization_comparison_densities" width="504px" style="display: block; margin: auto;" /></p>
+
+<p>Then, we have a closer look at how different normalization methods perform with respect to inferred gene-gene correlation. If you have prior knowledge about which genes you expect to cluster together, the heatmaps allow you to check the impact of normalization.</p>
+
+<div style="display: none">
+    Global normalization (to see the full-size image, click on the preview image below):
+
+    <div class="centered">
+        <a href="QC_report/GeneClusteringGlobal.png" target="_blank"><img src="QC_report/GeneClusteringGlobal_preview.png"></a>
+    </div>
+
+    Housekeeping normalization (to see the full-size image, click on the preview image below):
+
+    <div class="centered" style="display: block">
+        <a href="QC_report/GeneClusteringHousekeeping.png" target="_blank"><img src="QC_report/GeneClusteringHousekeeping_preview.png"></a>
+    </div>
+</div>
+
+<div style="display: block">
+    <div class="centered">
+        (omitted since heatmaps were not enabled)
+    </div>
+</div>
+
+<h1 id="toc_24">Recommendations</h1>
+
+<h2 id="toc_25">QC flag summary</h2>
+
+<p>The following table lists all samples and marks those flagged by QC metrics with an &ldquo;X&rdquo;:</p>
+
+<table id="datatable">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> SampleIdentifier </th>
+   <th style="text-align:left;"> SampleName </th>
+   <th style="text-align:left;"> TechnicalFlags </th>
+   <th style="text-align:left;"> ControlFlags </th>
+   <th style="text-align:left;"> CountFlags </th>
+   <th style="text-align:left;"> SampleType </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 01V-1_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 1VPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 02V-3_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 2VPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 03MF-26_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 03mfPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 03V-145_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 3VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 04PNVV-121_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 4PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 04V-73_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 4VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 05PNVV-147_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 18MFPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 05V-5_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 5VPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 07MF-39_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 07MPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 07PNVV-28_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 7pnvvPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 07V-7_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 7VPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 08MF-98_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 8MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 08PNM-202_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 32MFMX </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 09MF-140_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 15MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 09PNVV-30_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 9pnvvPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 09V-9_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 9VPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 102PNJ-172_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 103PNJ-173_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 10MF-141_0_0.RCC </td>
+   <td style="text-align:left;"> 15MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 10PNJ-185_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 10PNVV-32_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 10pnvvPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 110PNJ-174_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 11MF-46_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 11MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 11PNVV-86_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 11PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 11V-74_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 11VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 127PNJ-175_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 12MF-48_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 12MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 12PNVV-75_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 12PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 12V-62_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 12VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 137PNJ-186_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 13PNVV-64_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 13PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 14MF-152_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 14MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 14PNVV-50_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 14PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15MF-153_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 15MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15PNVV-34_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 15pnvvPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 160PNJ-176_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 16MF-156_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 18MFPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 178PNJ-177_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 17MF-161_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 17MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 17PNVV-88_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 17PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 181PNJ-178_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 184PNJ-179_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 185PNJ-180_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 18MF-163_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 18MFPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 18PNVV-66_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 18PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 19PNVV-52_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 19PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 200PNJ-183_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 201PNJ-184_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 20PNVV-54_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 20PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 21PNVV-69_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 21PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 23MF-196_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 32MFMX </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 24MF-199_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 32MFMX </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 24PNVV-125_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 24PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 26MF-207_0_0.RCC </td>
+   <td style="text-align:left;"> 26MF-PRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 26PNVV-110_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 26PNVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 27PNVV-100_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 27PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 28PNVV-90_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 28PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 29PNVV-92_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 29PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 30MF-210_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 30MF-PRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 30PNVV-94_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 30PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 31MF-191_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 31PNVV-112_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 31PNVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 31V-165_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 32MF-187_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 32PNVV-102_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 32PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 32V-166_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 33MF-189_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 33PNVV-114_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 33PNVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 33V-181_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 35PNVV-127_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 35PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 36PNVV-104_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 36PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 37PNVV-116_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 37PNVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 38PNVV-13_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 38PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 39PNVV-36_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 39pnvvPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 40PNVV-106_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 40PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 40V-11_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 40VPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 44PNVV-167_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 18MFPre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 45PNHVV-14_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 45PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 46PNHVV-15_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 46PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 47PNVV-56_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 47PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 48PNVV-96_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 48PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 48V-58_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 48VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 49PNVV-16_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 49PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 49V-129_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 49VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 50PNVV-77_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 50PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 52PNVV-136_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 15MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 52V-60_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 52VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 53PNHVV-17_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 53PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 54PNVV-78_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 54PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 54V-108_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 54VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 55PNVV-118_0_0_LA.RCC </td>
+   <td style="text-align:left;"> 55PNVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 55V-72_0_0_BL.RCC </td>
+   <td style="text-align:left;"> 55VPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 56PNVV-79_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 56PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 57PNVV-18_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 57PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 58PNVV-80_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 58PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 59PNVV-81_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 59PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 60PNVV-19_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 60PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 61PNVV-82_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 61PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 62PNVV-20_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 62PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 63PNVV-83_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 63PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 64PNVV-21_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 64PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 67PNVV-133_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 15MFPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 69PNVV-22_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 69PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 70PNVV-170_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 70PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 71PNHVV-23_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 71PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> X </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 72PNJ-171_0_1_LB.RCC </td>
+   <td style="text-align:left;"> 102PNJ </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 72PNVV-84_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 72PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 73PNVV-24_0_1_HE.RCC </td>
+   <td style="text-align:left;"> 73PNHVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 74PNVV-120_0_0_LB.RCC </td>
+   <td style="text-align:left;"> 74PNVVpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 75PNVV-132_0_0_HE.RCC </td>
+   <td style="text-align:left;"> 75PNVVPRE </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 86PNJ-182_0_1_BL.RCC </td>
+   <td style="text-align:left;"> 33Vpre </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+</tbody>
+</table>
+
+<p><a href="QC_report/SampleFlags.txt">Download as tab-delimited text file</a></p>
+
+<h2 id="toc_26">Clustering and QC-flagged samples</h2>
+
+<p>Below, we center each gene across all samples and perform a clustering based on correlation. Blue means lower expression than the mean of all samples, red higher expression. The colored bars above the heatmap indicate samples flagged in different QC categories (to see the full-size image, click on the preview image below):</p>
+
+<div style="display: none">
+    <div class="centered">
+        <a href="QC_report/CenteredSampleClustering.png" target="_blank"><img src="QC_report/CenteredSampleClustering_preview.png"></a>
+    </div>
+</div>
+
+<div style="display: block">
+    (omitted since heatmaps were not enabled)
+</div>
+
+<p>Finally, we exclude all flagged samples and recluster. The colored bar above the plot now represents the total number of counts per sample, with deeper color reflecting more counts (to see the full-size image, click on the preview image below):</p>
+
+<div style="display: none">
+    <div class="centered">
+        <a href="QC_report/CenteredSampleClusteringExcludingFlaggedSamples.png" target="_blank"><img src="QC_report/CenteredSampleClusteringExcludingFlaggedSamples_preview.png"></a>
+    </div>
+</div>
+
+<div style="display: block">
+    (omitted since heatmaps were not enabled)
+</div>
+
+<h1 id="toc_27">SessionInfo</h1>
+
+<<<<<<< HEAD
+<p>This report was created by javi on 2019-04-15 10:33:21.</p>
+
+<div style="font-family: monospace; white-space: pre;">
+R version 3.5.1 (2018-07-02)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS  10.14.2
+
+Matrix products: default
+BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+=======
+<p>This report was created by aurelio on 2019-04-15 07:15:38.</p>
+
+<div style="font-family: monospace; white-space: pre;">
+R version 3.4.3 (2017-11-30)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS  10.14.3
+
+Matrix products: default
+BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+>>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+<<<<<<< HEAD
+ [1] clusterProfiler_3.10.1 iRefR_1.13             RBGL_1.58.2           
+ [4] graph_1.60.0           igraph_1.2.4           biomaRt_2.38.0        
+ [7] WGCNA_1.66             fastcluster_1.1.25     dynamicTreeCut_1.63-1 
+[10] dplyr_0.8.0.1          NanoStringQCPro_1.14.0 Biobase_2.42.0        
+[13] BiocGenerics_0.28.0   
+
+loaded via a namespace (and not attached):
+  [1] fgsea_1.8.0           colorspace_1.4-1      ggridges_0.5.1       
+  [4] qvalue_2.14.1         htmlTable_1.13.1      markdown_0.9         
+  [7] base64enc_0.1-3       rstudioapi_0.10       farver_1.1.0         
+ [10] urltools_1.7.2        ggrepel_0.8.0         bit64_0.9-7          
+ [13] AnnotationDbi_1.44.0  mvtnorm_1.0-10        xml2_1.2.0           
+ [16] codetools_0.2-16      splines_3.5.1         doParallel_1.0.14    
+ [19] GOSemSim_2.8.0        impute_1.56.0         robustbase_0.93-4    
+ [22] knitr_1.22            polyclip_1.10-0       jsonlite_1.6         
+ [25] Formula_1.2-3         gridBase_0.4-7        cluster_2.0.7-1      
+ [28] GO.db_3.7.0           png_0.1-7             ggforce_0.2.1        
+ [31] rrcov_1.4-7           compiler_3.5.1        httr_1.4.0           
+ [34] rvcheck_0.1.3         backports_1.1.3       assertthat_0.2.1     
+ [37] Matrix_1.2-16         lazyeval_0.2.2        tweenr_1.0.1         
+ [40] acepack_1.4.1         htmltools_0.3.6       prettyunits_1.0.2    
+ [43] tools_3.5.1           gtable_0.3.0          glue_1.3.1           
+ [46] reshape2_1.4.3        DO.db_2.9             fastmatch_1.1-0      
+ [49] Rcpp_1.0.1            enrichplot_1.2.0      NMF_0.21.0           
+ [52] preprocessCore_1.44.0 iterators_1.0.10      ggraph_1.0.2         
+ [55] xfun_0.6              stringr_1.4.0         rngtools_1.3.1       
+ [58] XML_3.98-1.19         DOSE_3.8.2            org.Hs.eg.db_3.7.0   
+ [61] DEoptimR_1.0-8        europepmc_0.3         MASS_7.3-51.1        
+ [64] scales_1.0.0          hms_0.4.2             RColorBrewer_1.1-2   
+ [67] yaml_2.2.0            memoise_1.1.0         gridExtra_2.3        
+ [70] UpSetR_1.3.3          ggplot2_3.1.0         pkgmaker_0.27        
+ [73] triebeard_0.3.0       rpart_4.1-13          latticeExtra_0.6-28  
+ [76] stringi_1.4.3         RSQLite_2.1.1         highr_0.8            
+ [79] S4Vectors_0.20.1      pcaPP_1.9-73          foreach_1.4.4        
+ [82] checkmate_1.9.1       BiocParallel_1.16.6   bibtex_0.4.2         
+ [85] rlang_0.3.1           pkgconfig_2.0.2       matrixStats_0.54.0   
+ [88] bitops_1.0-6          evaluate_0.13         lattice_0.20-38      
+ [91] purrr_0.3.2           htmlwidgets_1.3       cowplot_0.9.4        
+ [94] bit_1.1-14            tidyselect_0.2.5      robust_0.4-18        
+ [97] plyr_1.8.4            magrittr_1.5          R6_2.4.0             
+[100] IRanges_2.16.0        Hmisc_4.2-0           fit.models_0.5-14    
+[103] DBI_1.0.0             pillar_1.3.1          foreign_0.8-71       
+[106] withr_2.1.2           survival_2.43-3       RCurl_1.95-4.12      
+[109] nnet_7.3-12           tibble_2.1.1          crayon_1.3.4         
+[112] viridis_0.5.1         progress_1.2.0        grid_3.5.1           
+[115] data.table_1.12.0     blob_1.1.1            digest_0.6.18        
+[118] xtable_1.8-3          tidyr_0.8.3           gridGraphics_0.3-0   
+[121] stats4_3.5.1          munsell_0.5.0         ggplotify_0.0.3      
+[124] viridisLite_0.3.0     registry_0.5-1       
+=======
+ [1] clusterProfiler_3.6.0  DOSE_3.4.0             biomaRt_2.34.2        
+ [4] WGCNA_1.63             fastcluster_1.1.25     dynamicTreeCut_1.63-1 
+ [7] dplyr_0.8.0.1          NanoStringQCPro_1.10.0 bigmemory_4.5.33      
+[10] Biobase_2.38.0         BiocGenerics_0.24.0   
+
+loaded via a namespace (and not attached):
+  [1] fgsea_1.4.1           bigmemory.sri_0.1.3   colorspace_1.4-1     
+  [4] qvalue_2.10.0         htmlTable_1.13.1      base64enc_0.1-3      
+  [7] rstudioapi_0.10       bit64_0.9-7           AnnotationDbi_1.40.0 
+ [10] mvtnorm_1.0-7         codetools_0.2-16      splines_3.4.3        
+ [13] doParallel_1.0.14     GOSemSim_2.4.1        impute_1.52.0        
+ [16] robustbase_0.93-4     knitr_1.22            Formula_1.2-3        
+ [19] gridBase_0.4-7        cluster_2.0.7-1       GO.db_3.5.0          
+ [22] png_0.1-7             rrcov_1.4-7           compiler_3.4.3       
+ [25] httr_1.4.0            rvcheck_0.1.3         backports_1.1.3      
+ [28] assertthat_0.2.1      Matrix_1.2-17         lazyeval_0.2.2       
+ [31] acepack_1.4.1         htmltools_0.3.6       prettyunits_1.0.2    
+ [34] tools_3.4.3           igraph_1.2.4          gtable_0.3.0         
+ [37] glue_1.3.1            reshape2_1.4.3        DO.db_2.9            
+ [40] fastmatch_1.1-0       Rcpp_1.0.1            NMF_0.21.0           
+ [43] preprocessCore_1.40.0 iterators_1.0.10      xfun_0.5             
+ [46] stringr_1.4.0         rngtools_1.3.1        XML_3.98-1.19        
+ [49] org.Hs.eg.db_3.5.0    DEoptimR_1.0-8        MASS_7.3-51.1        
+ [52] scales_1.0.0          hms_0.4.2             RColorBrewer_1.1-2   
+ [55] yaml_2.2.0            memoise_1.1.0         gridExtra_2.3        
+ [58] ggplot2_3.1.0         pkgmaker_0.27         rpart_4.1-13         
+ [61] latticeExtra_0.6-28   stringi_1.4.3         RSQLite_2.1.1        
+ [64] highr_0.8             S4Vectors_0.16.0      pcaPP_1.9-73         
+ [67] foreach_1.4.4         checkmate_1.9.1       BiocParallel_1.12.0  
+ [70] bibtex_0.4.2          rlang_0.3.2           pkgconfig_2.0.2      
+ [73] matrixStats_0.54.0    bitops_1.0-6          evaluate_0.13        
+ [76] lattice_0.20-38       purrr_0.3.2           htmlwidgets_1.3      
+ [79] bit_1.1-14            tidyselect_0.2.5      robust_0.4-18        
+ [82] plyr_1.8.4            magrittr_1.5          R6_2.4.0             
+ [85] IRanges_2.12.0        Hmisc_4.2-0           fit.models_0.5-14    
+ [88] DBI_1.0.0             pillar_1.3.1          foreign_0.8-71       
+ [91] withr_2.1.2           survival_2.43-3       RCurl_1.95-4.12      
+ [94] nnet_7.3-12           tibble_2.1.1          crayon_1.3.4         
+ [97] progress_1.2.0        grid_3.4.3            data.table_1.12.0    
+[100] blob_1.1.1            digest_0.6.18         xtable_1.8-3         
+[103] tidyr_0.8.3           stats4_3.4.3          munsell_0.5.0        
+[106] registry_0.5-1       
+>>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
+</div>
+
+</body>
+
+</html>
