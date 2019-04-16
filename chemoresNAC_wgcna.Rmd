@@ -18,20 +18,12 @@ set.seed(12345)
 options(stringsAsFactors = FALSE)
 
 # Load required libraries
-<<<<<<< HEAD
 source(paste(getwd(), "Code/0_loadLibraries.R", sep='/'))
 loadpkg("NanoStringQCPro")
 loadpkg("dplyr")
 loadpkg("WGCNA")
 loadpkg("biomaRt")
 loadpkg("iRefR")
-=======
-source(paste(getwd(), "Code/0_loadLibraries.R", sep='/')) # No esta en el repo
-installpkg("NanoStringQCPro")
-installpkg("dplyr")
-installpkg("WGCNA")
-installpkg("biomaRt")
->>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
 loadpkg("clusterProfiler")
 
 allowWGCNAThreads() # multi-threading within WGCNA. RStudio. For r, Rscript use enableWGCNAThreads()
@@ -62,11 +54,8 @@ for (i in grep(pattern = '\\.' ,pre_samples$key2)) {
 rccSet <- newRccSet(
   rccFiles               = file.path(rccDir, pre_samples$fname)
   #,rccCollectorToolExport = file.path(exampleDataDir, "nSolver", "RCC_collector_tool_export.csv")
-<<<<<<< HEAD
-  ,rlf                    = file.path(DataDir,"RLFData/NS_CancerPath_C2535.rlf")
-=======
   ,rlf                    = file.path(DataDir,"RLFData/NS_CancerPath_C2535.rlf") #rlf file in RLFData subdir
->>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
+
   #,cdrDesignData          = file.path(exampleDataDir, "CDR", "CDR-DesignData.csv")
   #,extraPdata             = file.path(exampleDataDir, "extraPdata", "SampleType.txt")
   #,blankLabel             = "blank"
@@ -92,11 +81,8 @@ qc_rccSet <- makeQCReport(norm_rccSet, "QC_report"
 ncounts <- assayData(qc_rccSet)$normData
 
 ## Apply QC filter
-<<<<<<< HEAD
+
 keepFiles <- dplyr::filter(qc_rccSet@phenoData@data, TechnicalFlags == FALSE)$FileName
-=======
-keepFiles <- dplyr::filter(qc_rccSet@phenoData@data, has.QCflag == FALSE)$FileName # dropFiles is not a good name for this variable
->>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
 ncounts <- ncounts[, keepFiles]
 
 ## Remove control genes (positive, negative, housekeeping)
@@ -161,11 +147,8 @@ nGenes = ncol(datExpr)
 nSamples = nrow(datExpr)
 ```  
 
-<<<<<<< HEAD
-We finally keep `r nSamples` samples.
-=======
+
 We  keep `r nsamples` samples after QC and clustering.
->>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
 
 ### Load clinical data  
 
