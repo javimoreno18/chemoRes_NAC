@@ -55,7 +55,6 @@ rccSet <- newRccSet(
   rccFiles               = file.path(rccDir, pre_samples$fname)
   #,rccCollectorToolExport = file.path(exampleDataDir, "nSolver", "RCC_collector_tool_export.csv")
   ,rlf                    = file.path(DataDir,"RLFData/NS_CancerPath_C2535.rlf") #rlf file in RLFData subdir
-
   #,cdrDesignData          = file.path(exampleDataDir, "CDR", "CDR-DesignData.csv")
   #,extraPdata             = file.path(exampleDataDir, "extraPdata", "SampleType.txt")
   #,blankLabel             = "blank"
@@ -124,7 +123,6 @@ sampleTree = hclust(dist(datExpr0), method = "average");
 ## Plot the sample tree: Open a graphic output window of size 12 by 9 inches
 ## The user should change the dimensions if the window is too large or too small.
 
-###### somehow not working #########
 sizeGrWindow(12,9)   
 # pdf(file = "sampleClustering.pdf", width = 12, height = 9);
 par(cex = 0.6);
@@ -372,18 +370,9 @@ labeledHeatmap(Matrix = moduleTraitCor,
 #dev.off()
 ```  
 
-<<<<<<< HEAD
 Module eigengene turquoise shows significant anti-correlation with chemoresistance (-0.25 pval=0.008 ).
 Module eigengene grey shows significant anti-correlation with chemoresistance (-0.2 pval=0.03 ).
 Module eigengene yellow shows significant anti-correlation with chemoresistance (-0.19 pval=0.05 ).
-  
-=======
-[Module eigengene grey shows significant correlation with chemoresistance (0.33 pval=0.004 ).]
-[Module eigengene blue shows significant anticorrelation with chemoresistance (-0.29 pval= 0.01).]
-[Module eigengene turquoise shows significant anticorrelation with chemoresistance (-0.24 pval=0.04 ).] 
-Module eigengene turquoise shows  anticorrelation with chemoresistance (-0.2 pval=0.06)
-Module eigengene yellow shows anticorrelation with chemoresistance (-0.19 pval=0.08)
->>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
 
 ### Gene relationship to trait and important modules:Gene ignificance and Module Membership  
 
@@ -507,6 +496,7 @@ Now, we have to download several high confidence human interactomes in order to 
 * The DIAMOnD paper interactome provided by Ghiassian et al.(2015)[1].  
 * STRINGdb human interactome with a score threshold > 0.7.  
 * iRef human interactome  
+* A metabolism centered interactome
 
 ### Proccessing the STRINGdb interactome  
 We download the whole interactome of Homo sapiens from https://string-db.org/cgi/download.pl?sessionId=ED2PAnsg3O9r&species_text=Homo+sapiens. We need to process the data frame to apply a score filter and to map the ensembl protein ids to gene ids.  
@@ -587,7 +577,41 @@ iRef_interactome <- na.omit(irefindex_tab %>%
 
 # Save processed interactome in a file.
 write.table(iRef_interactome, file = "Data/iRef_interactome.tsv", row.names = F, col.names = T)
-```
+```  
+
+### Loading and processing the metabolism centered interactome  
+
+We download the interactome from https://bioinfo.uth.edu/ccmGDB/download/2072genes_PathwayCommons.txt?csrt=5379671582968607161. This interactome has Pathway Commons format (see http://www.pathwaycommons.org/pc/sif_interaction_rules.do). We have to process it to keep only the INTERACTS_WITH relationships.  
+
+```{r eval=FALSE, include=FALSE}
+met.interactome <- na.omit(read.table(file = "Data/2072genes_PathwayCommons.txt", header = F, stringsAsFactors = F, fill = T, col.names = c('??','entity1','relationship_type','entity2'))) %>% dplyr::filter(relationship_type == 'interacts-with') %>% dplyr::select(entity1, entity2)
+
+symbol_ids <- unique(c(met.interactome$entity1, met.interactome$entity2))
+dict <- bitr(symbol_ids, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")
+
+symbol_to_entrez <- function(symbol_id, dict){
+  indx <- match(symbol_id, dict$SYMBOL)
+  if(!is.na(indx)){
+    return(dict$ENTREZID[indx])
+  }else{
+    return(NA)
+  }
+}
+
+met.interactome <- na.omit(met.interactome %>% 
+  mutate(N1 = as.numeric(unlist(lapply(entity1, symbol_to_entrez, dict))), 
+         N2 = as.numeric(unlist(lapply(entity2, symbol_to_entrez, dict))) %>% 
+  dplyr::select(N1, N2))
+
+# Save processed interactome in a file.
+write.table(met.interactome, file = "Data/metabolism-centered_interactome.tsv", row.names = F, col.names = T)
+rm(symbol_ids)
+rm(dict)
+rm(met.interactome)
+```  
+
+Finally, we keep 684776 interactions.  
+
 ### Running DIAMOnD  
 
 ```{r}
@@ -620,7 +644,7 @@ grey_module <- geneInfo %>%
 
 yellow_module <- geneInfo %>% 
   dplyr::filter(moduleColor == "yellow") %>%
-  dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes, p.GS.ChemoRes, MM.blue, p.MM.blue)
+  dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes, p.GS.ChemoRes, MM.yellow, p.MM.yellow)
 
 turquoise_module <- geneInfo %>% 
   dplyr::filter(moduleColor == "turquoise") %>%
@@ -698,13 +722,17 @@ expand_module("turquoise", network_path = "Data/iRef_interactome.tsv")
 expand_module("yellow", network_path = "Data/STRINGdb_interactome.tsv")
 expand_module("grey", network_path = "Data/STRINGdb_interactome.tsv")
 expand_module("turquoise", network_path = "Data/STRINGdb_interactome.tsv")
+
+expand_module("yellow", network_path = "Data/metabolism-centered_interactome.tsv")
+expand_module("grey", network_path = "Data/metabolism-centered_interactome.tsv")
+expand_module("turquoise", network_path = "Data/metabolism-centered_interactome.tsv")
 ```  
 
 ### Expanded modules enrichment  
 
 With DIAMOnD we have obtained networks built on basis on modules initial seed genes and the diferent interactomes. Since we had 3 interactomes and 3 modules, now we have 9 networks. The next step is to evaluate the networks by performing a functional enrichment.  
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 # file.remove(list.files(path = "Results", pattern = "module_enrichment.csv", full.names = T))
 # expanded_modules <- list.files(path = "Results", pattern = "interactome_expanded", full.names = T)
 
@@ -722,10 +750,10 @@ expanded_module_enrichment <- function(genes_file_path){
   
   cat(paste(genes_file_path, "enrichment DONE", '\n'))
   cat(paste("Results in", outfilename, '\n'))
+  return("OK")
 }
 
 lapply(expanded_modules, expanded_module_enrichment)
-
 ```
 
 ## References  
