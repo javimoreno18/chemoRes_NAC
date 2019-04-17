@@ -372,18 +372,11 @@ labeledHeatmap(Matrix = moduleTraitCor,
 #dev.off()
 ```  
 
-<<<<<<< HEAD
+
 Module eigengene turquoise shows significant anti-correlation with chemoresistance (-0.25 pval=0.008 ).
 Module eigengene grey shows significant anti-correlation with chemoresistance (-0.2 pval=0.03 ).
 Module eigengene yellow shows significant anti-correlation with chemoresistance (-0.19 pval=0.05 ).
   
-=======
-[Module eigengene grey shows significant correlation with chemoresistance (0.33 pval=0.004 ).]
-[Module eigengene blue shows significant anticorrelation with chemoresistance (-0.29 pval= 0.01).]
-[Module eigengene turquoise shows significant anticorrelation with chemoresistance (-0.24 pval=0.04 ).] 
-Module eigengene turquoise shows  anticorrelation with chemoresistance (-0.2 pval=0.06)
-Module eigengene yellow shows anticorrelation with chemoresistance (-0.19 pval=0.08)
->>>>>>> ce130bc06681c3e77ed0863bdf050785728b2615
 
 ### Gene relationship to trait and important modules:Gene ignificance and Module Membership  
 
@@ -442,7 +435,8 @@ We have found modules with high association with our trait of interest, and have
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 # Load gene annotation info from NS_CancerPath_C2535.rlf file
 
-annot <- readRlf("Data/RLFData/NS_CancerPath_C2535.rlf")
+#annot <- readRlf("Data/RLFData/NS_CancerPath_C2535.rlf")
+annot <- readRlf(paste0(DataDir, "/RLFData/NS_CancerPath_C2535.rlf")) # We can use DataDir defined at the beginning
 
 get.probe <- function(complexid){
   parts = strsplit(complexid, split = "_")[[1]]
@@ -485,7 +479,7 @@ geneInfo = geneInfo0[geneOrder, ]
 write.csv(geneInfo, file = "Results/geneInfo.csv", quote = F,row.names = F)
 
 ## Write interesting modules gene info in a file
-intModules <- c("grey","blue","turquoise");
+intModules <- c("grey","yellow","turquoise");
 module_gene_info <- function(module, geneInfo){
   ChemoRes.genes <- geneInfo[which(geneInfo$moduleColor==module), c(1,2,3,4,5,6:9)]
   write.csv(ChemoRes.genes, file = paste("Results/",module,"-genesInfo.csv", sep=""), quote = F,row.names = F)
@@ -620,7 +614,7 @@ grey_module <- geneInfo %>%
 
 yellow_module <- geneInfo %>% 
   dplyr::filter(moduleColor == "yellow") %>%
-  dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes, p.GS.ChemoRes, MM.blue, p.MM.blue)
+  dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes, p.GS.ChemoRes, MM.yellow, p.MM.yellow)
 
 turquoise_module <- geneInfo %>% 
   dplyr::filter(moduleColor == "turquoise") %>%
