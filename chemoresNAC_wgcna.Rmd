@@ -431,7 +431,8 @@ We have found modules with high association with our trait of interest, and have
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 # Load gene annotation info from NS_CancerPath_C2535.rlf file
 
-annot <- readRlf("Data/RLFData/NS_CancerPath_C2535.rlf")
+#annot <- readRlf("Data/RLFData/NS_CancerPath_C2535.rlf")
+annot <- readRlf(paste0(DataDir, "/RLFData/NS_CancerPath_C2535.rlf")) # We can use DataDir defined at the beginning
 
 get.probe <- function(complexid){
   parts = strsplit(complexid, split = "_")[[1]]
@@ -474,11 +475,19 @@ geneInfo = geneInfo0[geneOrder, ]
 write.csv(geneInfo, file = "Results/geneInfo.csv", quote = F,row.names = F)
 
 ## Write interesting modules gene info in a file
-intModules <- c("grey","blue","turquoise");
+intModules <- c("grey","yellow","turquoise");
 module_gene_info <- function(module, geneInfo){
-  ChemoRes.genes <- geneInfo[which(geneInfo$moduleColor==module), c(1,2,3,4,5,6:9)]
-  write.csv(ChemoRes.genes, file = paste("Results/",module,"-genesInfo.csv", sep=""), quote = F,row.names = F)
-  return(NULL)
+  if(module=="grey"){
+	  ChemoRes.genes <- geneInfo[which(geneInfo$moduleColor==module), c(1,2,3,4,5,6,9,10)]
+	}
+	if(module=="yellow"){
+	  ChemoRes.genes <- geneInfo[which(geneInfo$moduleColor==module), c(1,2,3,4,5,6,11,12)]
+	}
+	if(module=="turquoise"){
+	  ChemoRes.genes <- geneInfo[which(geneInfo$moduleColor==module), c(1,2,3,4,5,6,7,8)]
+	}
+	write.csv(ChemoRes.genes, file = paste("Results/",module,"-genesInfo.csv", sep=""), quote = F,row.names = F)
+	return(NULL)
 }
 lapply(intModules, module_gene_info, geneInfo)
 ```  
@@ -639,15 +648,15 @@ geneInfo <- read.csv(file = "Results/geneInfo.csv", header = T)
 
 # Separate modules
 grey_module <- geneInfo %>% 
-  dplyr::filter(moduleColor == "grey") %>%
+  dplyr::filter(moduleColor == "grey" & abs(MM.grey) >= 0.70 & abs(GS.ChemoRes) >= 0.15) %>%
   dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes, p.GS.ChemoRes, MM.grey, p.MM.grey)
 
 yellow_module <- geneInfo %>% 
-  dplyr::filter(moduleColor == "yellow") %>%
+  dplyr::filter(moduleColor == "yellow" & abs(MM.yellow) >= 0.70 & abs(GS.ChemoRes) >= 0.15) %>%
   dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes, p.GS.ChemoRes, MM.yellow, p.MM.yellow)
 
 turquoise_module <- geneInfo %>% 
-  dplyr::filter(moduleColor == "turquoise") %>%
+  dplyr::filter(moduleColor == "turquoise" & abs(MM.turquoise) >= 0.70 & abs(GS.ChemoRes) >= 0.15) %>%
   dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes, p.GS.ChemoRes, MM.turquoise, p.MM.turquoise)
 ```  
 
@@ -656,10 +665,12 @@ turquoise_module <- geneInfo %>%
 ```{r}
 source("Code/chemoRes_enrichment.R")
 
-module_enrichment_analysis <- function(geneInfo, module, GS=0.2){
+module_enrichment_analysis <- function(geneInfo, module, GS=0.2, MM){
+  
+  MM.module <- paste("MM.",module,sep="")
   
   res <- geneInfo %>% 
-    dplyr::filter(moduleColor == module & !is.na(entrezID) & abs(GS.ChemoRes) > GS) %>%
+    dplyr::filter(moduleColor == module & !is.na(entrezID) & abs(GS.ChemoRes) >= GS & abs(geneInfo[,MM.module]) >= MM) %>%
     dplyr::select(Accession, geneSymbol, entrezID, GS.ChemoRes) %>% 
     dplyr::mutate(entrezID = as.character(entrezID))
      
@@ -673,15 +684,15 @@ module_enrichment_analysis <- function(geneInfo, module, GS=0.2){
   write.csv(enrich_summary, file = paste("Results/",module,"_module_enrichment.csv", sep=""))
 }
 
-module_enrichment_analysis(geneInfo, "grey")
-module_enrichment_analysis(geneInfo, "yellow")
-module_enrichment_analysis(geneInfo, "turquoise")
+module_enrichment_analysis(geneInfo, "grey", GS=0.15, MM = 0.7)
+module_enrichment_analysis(geneInfo, "yellow", GS=0.15, MM=0.7)
+module_enrichment_analysis(geneInfo, "turquoise", GS=0.15, MM=0.7)
 ```  
 
 ## Network construction with DIAMOnD  
 
 ```{r}
-expand_module <- function(module, n=200, network_path){
+expand_module <- function(module, n=300, network_path){
   pybin <- "/anaconda3/bin/python"
   diamond_path <- "DIAMOnD/DIAMOnD.py"
   interactome <- unlist(strsplit(network_path, "/|\\."))[2]
@@ -733,8 +744,8 @@ expand_module("turquoise", network_path = "Data/metabolism-centered_interactome.
 With DIAMOnD we have obtained networks built on basis on modules initial seed genes and the diferent interactomes. Since we had 3 interactomes and 3 modules, now we have 9 networks. The next step is to evaluate the networks by performing a functional enrichment.  
 
 ```{r eval=FALSE, include=FALSE}
-# file.remove(list.files(path = "Results", pattern = "module_enrichment.csv", full.names = T))
-# expanded_modules <- list.files(path = "Results", pattern = "interactome_expanded", full.names = T)
+file.remove(list.files(path = "Results", pattern = "module_enrichment.csv", full.names = T))
+expanded_modules <- list.files(path = "Results", pattern = "interactome_expanded", full.names = T)
 
 expanded_module_enrichment <- function(genes_file_path){
   outfilename <- paste("Results/",unlist(strsplit(genes_file_path, '/|\\.'))[2], "_enrichment.csv",sep = "")
