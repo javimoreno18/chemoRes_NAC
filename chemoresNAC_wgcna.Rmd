@@ -695,7 +695,7 @@ module_enrichment_analysis(geneInfo, "turquoise", GS=0.15, MM=0.7)
 ```{r}
 expand_module <- function(module, n, network_path){
   pybin <- "/anaconda3/bin/python"
-  diamond_path <- "DIAMOnD/DIAMOnD.py"
+  diamond_path <- "Code/DIAMOnD.py"
   interactome <- unlist(strsplit(network_path, "/|\\."))[2]
   
   aux.df <- read.csv(file = paste("Results/modules_enrichments/",module,"_module_genes.csv", sep=""))
