@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Setting up R session
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-workingDir = '.'
+workingDir = "/Users/javi/Desktop/R-workspace/chemoResNAC_wgcna"
 setwd(workingDir)
 set.seed(12345)
 options(stringsAsFactors = FALSE)
@@ -25,6 +25,7 @@ loadpkg("WGCNA")
 loadpkg("biomaRt")
 loadpkg("iRefR")
 loadpkg("clusterProfiler")
+loadpkg("rebus")
 
 allowWGCNAThreads() # multi-threading within WGCNA. RStudio. For r, Rscript use enableWGCNAThreads()
 ```
@@ -665,7 +666,7 @@ turquoise_module <- geneInfo %>%
 ```{r}
 source("Code/chemoRes_enrichment.R")
 
-module_enrichment_analysis <- function(geneInfo, module, GS=0.2, MM){
+module_enrichment_analysis <- function(geneInfo, module, GS, MM){
   
   MM.module <- paste("MM.",module,sep="")
   
@@ -680,24 +681,24 @@ module_enrichment_analysis <- function(geneInfo, module, GS=0.2, MM){
   enrich_summary <- enrich_rs$summary %>% arrange(qvalue)
   enrich_summary <- convert_enriched_ids(enrich_summary, entrezsymbol = entrezsymbol) %>% filter(qvalue <=0.01) %>% arrange(-Count)
   
-  write.csv(res, file = paste("Results/",module,"_module_genes.csv", sep="") )
-  write.csv(enrich_summary, file = paste("Results/",module,"_module_enrichment.csv", sep=""))
+  write.csv(res, file = paste("Results/modules_enrichments/",module,"_module_genes.csv", sep="") )
+  write.csv(enrich_summary, file = paste("Results/modules_enrichments/",module,"_module_enrichment.csv", sep=""))
 }
 
-module_enrichment_analysis(geneInfo, "grey", GS=0.15, MM = 0.7)
+module_enrichment_analysis(geneInfo, "grey", GS=0.15, MM = 0)
 module_enrichment_analysis(geneInfo, "yellow", GS=0.15, MM=0.7)
 module_enrichment_analysis(geneInfo, "turquoise", GS=0.15, MM=0.7)
 ```  
 
-## Network construction with DIAMOnD  
+## Modules expansion with DIAMOnD  
 
 ```{r}
-expand_module <- function(module, n=300, network_path){
+expand_module <- function(module, n, network_path){
   pybin <- "/anaconda3/bin/python"
   diamond_path <- "DIAMOnD/DIAMOnD.py"
   interactome <- unlist(strsplit(network_path, "/|\\."))[2]
   
-  aux.df <- read.csv(file = paste("Results/",module,"_module_genes.csv", sep=""))
+  aux.df <- read.csv(file = paste("Results/modules_enrichments/",module,"_module_genes.csv", sep=""))
   genes <- as.numeric(aux.df$entrezID)
   seed_genes_path <- paste("Data/",module,"_seed_genes.txt", sep="")
   diamond_res_outfilename <- "Results/DIAMOnD_res.csv"
@@ -715,40 +716,75 @@ expand_module <- function(module, n=300, network_path){
   system(paste("rm", seed_genes_path, sep=" "))
   # Delete temporary DIAMOnD result file
   system(paste("rm", diamond_res_outfilename, sep=" "))
-  res.filename <- paste("Results/",interactome,"_expanded_",module,"_module.txt", sep = "")
+  res.filename <- paste("Results/expanded_modules/",interactome,"_n=",n,"_expanded_",module,"_module.txt", sep = "")
   
   cat(paste("Expanded ",module, " module genes in ",res.filename, sep = ""))
   # Write module expanded genes file
   write.table(expanded_module_genes, file = res.filename, row.names = F, col.names = F)
 }
 
-expand_module("yellow", network_path = "Data/Ghiassian_interactome.tsv")
-expand_module("grey", network_path = "Data/Ghiassian_interactome.tsv")
-expand_module("turquoise", network_path = "Data/Ghiassian_interactome.tsv")
+# n = 300
+expand_module("yellow", network_path = "Data/Ghiassian_interactome.tsv", n=300)
+expand_module("grey", network_path = "Data/Ghiassian_interactome.tsv", n=300)
+expand_module("turquoise", network_path = "Data/Ghiassian_interactome.tsv", n=300)
 
-expand_module("yellow", network_path = "Data/iRef_interactome.tsv")
-expand_module("grey", network_path = "Data/iRef_interactome.tsv")
-expand_module("turquoise", network_path = "Data/iRef_interactome.tsv")
+expand_module("yellow", network_path = "Data/iRef_interactome.tsv", n=300)
+expand_module("grey", network_path = "Data/iRef_interactome.tsv", n=300)
+expand_module("turquoise", network_path = "Data/iRef_interactome.tsv", n=300)
 
-expand_module("yellow", network_path = "Data/STRINGdb_interactome.tsv")
-expand_module("grey", network_path = "Data/STRINGdb_interactome.tsv")
-expand_module("turquoise", network_path = "Data/STRINGdb_interactome.tsv")
+expand_module("yellow", network_path = "Data/STRINGdb_interactome.tsv", n=300)
+expand_module("grey", network_path = "Data/STRINGdb_interactome.tsv", n=300)
+expand_module("turquoise", network_path = "Data/STRINGdb_interactome.tsv", n=300)
 
-expand_module("yellow", network_path = "Data/metabolism-centered_interactome.tsv")
-expand_module("grey", network_path = "Data/metabolism-centered_interactome.tsv")
-expand_module("turquoise", network_path = "Data/metabolism-centered_interactome.tsv")
+expand_module("yellow", network_path = "Data/metabolism-centered_interactome.tsv", n=300)
+expand_module("grey", network_path = "Data/metabolism-centered_interactome.tsv", n=300)
+expand_module("turquoise", network_path = "Data/metabolism-centered_interactome.tsv", n=300)
+
+## n = 200
+expand_module("yellow", network_path = "Data/Ghiassian_interactome.tsv", n=200)
+expand_module("grey", network_path = "Data/Ghiassian_interactome.tsv", n=200)
+expand_module("turquoise", network_path = "Data/Ghiassian_interactome.tsv", n=200)
+
+expand_module("yellow", network_path = "Data/iRef_interactome.tsv", n=200)
+expand_module("grey", network_path = "Data/iRef_interactome.tsv", n=200)
+expand_module("turquoise", network_path = "Data/iRef_interactome.tsv", n=200)
+
+expand_module("yellow", network_path = "Data/STRINGdb_interactome.tsv", n=200)
+expand_module("grey", network_path = "Data/STRINGdb_interactome.tsv", n=200)
+expand_module("turquoise", network_path = "Data/STRINGdb_interactome.tsv", n=200)
+
+expand_module("yellow", network_path = "Data/metabolism-centered_interactome.tsv", n=200)
+expand_module("grey", network_path = "Data/metabolism-centered_interactome.tsv", n=200)
+expand_module("turquoise", network_path = "Data/metabolism-centered_interactome.tsv", n=200)
+
+## n = 100
+expand_module("yellow", network_path = "Data/Ghiassian_interactome.tsv", n=100)
+expand_module("grey", network_path = "Data/Ghiassian_interactome.tsv", n=100)
+expand_module("turquoise", network_path = "Data/Ghiassian_interactome.tsv", n=100)
+
+expand_module("yellow", network_path = "Data/iRef_interactome.tsv", n=100)
+expand_module("grey", network_path = "Data/iRef_interactome.tsv", n=100)
+expand_module("turquoise", network_path = "Data/iRef_interactome.tsv", n=100)
+
+expand_module("yellow", network_path = "Data/STRINGdb_interactome.tsv", n=100)
+expand_module("grey", network_path = "Data/STRINGdb_interactome.tsv", n=100)
+expand_module("turquoise", network_path = "Data/STRINGdb_interactome.tsv", n=100)
+
+expand_module("yellow", network_path = "Data/metabolism-centered_interactome.tsv", n=100)
+expand_module("grey", network_path = "Data/metabolism-centered_interactome.tsv", n=100)
+expand_module("turquoise", network_path = "Data/metabolism-centered_interactome.tsv", n=100)
 ```  
 
-### Expanded modules enrichment  
+## Expanded modules enrichment  
 
 With DIAMOnD we have obtained networks built on basis on modules initial seed genes and the diferent interactomes. Since we had 3 interactomes and 3 modules, now we have 9 networks. The next step is to evaluate the networks by performing a functional enrichment.  
 
 ```{r eval=FALSE, include=FALSE}
-file.remove(list.files(path = "Results", pattern = "module_enrichment.csv", full.names = T))
-expanded_modules <- list.files(path = "Results", pattern = "interactome_expanded", full.names = T)
+file.remove(list.files(path = "Results/expanded_modules_enrichments", full.names = T))
+expanded_modules <- list.files(path = "Results/expanded_modules", full.names = T)
 
 expanded_module_enrichment <- function(genes_file_path){
-  outfilename <- paste("Results/",unlist(strsplit(genes_file_path, '/|\\.'))[2], "_enrichment.csv",sep = "")
+  outfilename <- paste("Results/expanded_modules_enrichments/",unlist(strsplit(genes_file_path, '/|\\.'))[3], "_enrichment.csv",sep = "")
   genes <- readLines(con = genes_file_path)
   
   cat(paste(genes_file_path, "enrichment...", '\n'))
@@ -764,6 +800,49 @@ expanded_module_enrichment <- function(genes_file_path){
   return("OK")
 }
 
+
+lapply(expanded_modules, expanded_module_enrichment)
+```  
+
+## Network construction from expanded modules  
+
+```{r}
+#file.remove(list.files(path = "Results/expanded_modules_networks", full.names = T))
+expanded_modules <- list.files(path = "Results/expanded_modules", full.names = T)
+
+entrez2symbol <- function(entrez, dict){
+  indx <- match(entrez, dict$ENTREZID)
+  if(!is.na(indx)){
+    return(dict$SYMBOL[indx])
+  }else{
+    return(NA)
+  }
+}
+
+network_building <- function(genes_file_path){
+  expanded_module <- unlist(strsplit(genes_file_path, '/|\\.'))[3]
+  outfilename <- paste("Results/expanded_modules_networks/",expanded_module, "_network.csv",sep = "")
+  interactome_name <- paste(unlist(strsplit(expanded_module, '_'))[1], 
+                            unlist(strsplit(expanded_module, '_'))[2],
+                            sep='_')
+  
+  interactome_file_path <- paste("Data/",interactome_name,".tsv",sep="")
+  
+  genes <- as.numeric(readLines(con = genes_file_path))
+  dict <- bitr(genes, fromType="ENTREZID", toType="SYMBOL", OrgDb="org.Hs.eg.db")
+  
+  interactome <- read.table(file = interactome_file_path, header = F)[1:2]
+  colnames(interactome) <- c('gene_id1', 'gene_id2')
+  
+  network <- interactome %>% 
+    dplyr::filter(gene_id1 %in% genes & gene_id2 %in% genes) %>%
+    dplyr::mutate(gene_symbol1 = entrez2symbol(gene_id1, dict),
+                  gene_symbol2 = entrez2symbol(gene_id2, dict))
+    
+  write.csv(network, file = outfilename)
+}
+
+lapply(expanded_modules, network_building)
 lapply(expanded_modules, expanded_module_enrichment)
 ```
 
