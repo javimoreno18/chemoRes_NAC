@@ -1,5 +1,6 @@
 orgdb <-  "org.Hs.eg.db"
 keggname <-  "hsa"
+reactomename = "human"
 
 mart = biomaRt::useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 entrezsymbol = biomaRt::getBM(attributes = c("entrezgene", "hgnc_symbol"), mart = mart)
@@ -27,6 +28,8 @@ enrich_cp.chemoRes <- function(genes, comparison){
                 qvalueCutoff = 1, pvalueCutoff = 1)
   kg = enrichKEGG(gene = genes, organism = keggname, pvalueCutoff = 1,
                   qvalueCutoff = 1, pAdjustMethod = "BH")
+  re = enrichPathway(gene=genes, organism = reactomename, pvalueCutoff=1, qvalueCutoff = 1, pAdjustMethod = "BH")
+  
   all = list(mf = mf, cc = cc, bp = bp, kg = kg)
   all[["summary"]] = summarize_cp(all, comparison)
   return(all)
