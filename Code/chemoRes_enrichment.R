@@ -30,7 +30,7 @@ enrich_cp.chemoRes <- function(genes, comparison){
                   qvalueCutoff = 1, pAdjustMethod = "BH")
   re = enrichPathway(gene=genes, organism = reactomename, pvalueCutoff=1, qvalueCutoff = 1, pAdjustMethod = "BH")
   
-  all = list(mf = mf, cc = cc, bp = bp, kg = kg)
+  all = list(mf = mf, cc = cc, bp = bp, kg = kg, re = re)
   all[["summary"]] = summarize_cp(all, comparison)
   return(all)
 }
