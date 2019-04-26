@@ -837,7 +837,7 @@ network_building <- function(genes_file_path){
   network <- interactome %>% 
     dplyr::filter(gene_id1 %in% genes & gene_id2 %in% genes)
   
-  G <- graph_from_data_frame(net, directed = F)
+  G <- graph_from_data_frame(network, directed = F)
   # Kleinberg's hub centrality score
   scores <- hub.score(G)$vector
   
