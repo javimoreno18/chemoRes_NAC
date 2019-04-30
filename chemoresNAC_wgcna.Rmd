@@ -23,9 +23,10 @@ loadpkg("NanoStringQCPro")
 loadpkg("dplyr")
 loadpkg("WGCNA")
 loadpkg("biomaRt")
-loadpkg("iRefR")
+#loadpkg("iRefR")
 loadpkg("clusterProfiler")
 loadpkg("rebus")
+loadpkg("igraph")
 
 allowWGCNAThreads() # multi-threading within WGCNA. RStudio. For r, Rscript use enableWGCNAThreads()
 ```
@@ -685,9 +686,9 @@ module_enrichment_analysis <- function(geneInfo, module, GS, MM){
   write.csv(enrich_summary, file = paste("Results/modules_enrichments/",module,"_module_enrichment.csv", sep=""))
 }
 
-module_enrichment_analysis(geneInfo, "grey", GS=0.15, MM = 0)
-module_enrichment_analysis(geneInfo, "yellow", GS=0.15, MM=0.7)
-module_enrichment_analysis(geneInfo, "turquoise", GS=0.15, MM=0.7)
+module_enrichment_analysis(geneInfo, "grey", GS=0.1, MM = 0.2)
+module_enrichment_analysis(geneInfo, "yellow", GS=0.1, MM=0.7)
+module_enrichment_analysis(geneInfo, "turquoise", GS=0.1, MM=0.7)
 ```  
 
 ## Modules expansion with DIAMOnD  
@@ -698,7 +699,7 @@ expand_module <- function(module, n, network_path){
   diamond_path <- "Code/DIAMOnD.py"
   interactome <- unlist(strsplit(network_path, "/|\\."))[2]
   
-  aux.df <- read.csv(file = paste("Results/modules_enrichments/",module,"_module_genes.csv", sep=""))
+  aux.df <- read.csv(file = paste("Results/kk/",module,"_module_genes.csv", sep=""))
   genes <- as.numeric(aux.df$entrezID)
   seed_genes_path <- paste("Data/",module,"_seed_genes.txt", sep="")
   diamond_res_outfilename <- "Results/DIAMOnD_res.csv"
@@ -780,8 +781,8 @@ expand_module("turquoise", network_path = "Data/metabolism-centered_interactome.
 With DIAMOnD we have obtained networks built on basis on modules initial seed genes and the diferent interactomes. Since we had 3 interactomes and 3 modules, now we have 9 networks. The next step is to evaluate the networks by performing a functional enrichment.  
 
 ```{r eval=FALSE, include=FALSE}
-file.remove(list.files(path = "Results/expanded_modules_enrichments", full.names = T))
-expanded_modules <- list.files(path = "Results/expanded_modules", full.names = T)
+# file.remove(list.files(path = "Results/expanded_modules_enrichments", full.names = T))
+# expanded_modules <- list.files(path = "Results/expanded_modules", full.names = T)
 
 expanded_module_enrichment <- function(genes_file_path){
   outfilename <- paste("Results/expanded_modules_enrichments/",unlist(strsplit(genes_file_path, '/|\\.'))[3], "_enrichment.csv",sep = "")
@@ -800,14 +801,13 @@ expanded_module_enrichment <- function(genes_file_path){
   return("OK")
 }
 
-
 lapply(expanded_modules, expanded_module_enrichment)
 ```  
 
 ## Network construction from expanded modules  
 
 ```{r}
-#file.remove(list.files(path = "Results/expanded_modules_networks", full.names = T))
+# file.remove(list.files(path = "Results/expanded_modules_networks", full.names = T))
 expanded_modules <- list.files(path = "Results/expanded_modules", full.names = T)
 
 entrez2symbol <- function(entrez, dict){
@@ -835,15 +835,27 @@ network_building <- function(genes_file_path){
   colnames(interactome) <- c('gene_id1', 'gene_id2')
   
   network <- interactome %>% 
-    dplyr::filter(gene_id1 %in% genes & gene_id2 %in% genes) %>%
-    dplyr::mutate(gene_symbol1 = entrez2symbol(gene_id1, dict),
-                  gene_symbol2 = entrez2symbol(gene_id2, dict))
-    
+    dplyr::filter(gene_id1 %in% genes & gene_id2 %in% genes)
+  
+  G <- graph_from_data_frame(network, directed = F)
+  # Kleinberg's hub centrality score
+  scores <- hub.score(G)$vector
+  
+  gene_symbol1 <- unlist(lapply(network$gene_id1, entrez2symbol, dict))
+  gene_symbol2 <- unlist(lapply(network$gene_id2, entrez2symbol, dict))
+  hub_score1 <- scores[as.character(network$gene_id1)]
+  hub_score2 <- scores[as.character(network$gene_id2)]
+  combined_score <- (hub_score1+hub_score2) / 2
+  network <- network %>%
+    dplyr::mutate(gene_symbol1 = gene_symbol1, 
+                  gene_symbol2 = gene_symbol2, 
+                  hub_score1 = hub_score1, 
+                  hub_score2 = hub_score2, 
+                  combined_score = combined_score)
   write.csv(network, file = outfilename)
 }
 
 lapply(expanded_modules, network_building)
-lapply(expanded_modules, expanded_module_enrichment)
 ```
 
 ## References  
